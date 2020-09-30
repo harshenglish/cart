@@ -1,0 +1,33 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cartdeployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Cart
+  template:
+    metadata:
+      labels:
+        app: Cart
+    spec:
+      containers:
+      - name: cartmicroservicerepo
+        image: productmicroservicecr.azurecr.io/cartmicroservicerepo:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: redone
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: Cart
